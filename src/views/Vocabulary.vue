@@ -11,20 +11,50 @@
         >
           <b-card-text>
             <b-button-group vertical>
-              <b-button pill size="lg" variant="outline-primary" @click="checkAnswer(opciones.opc1)">{{opciones.opc1}}
-
+              <b-button
+                pill
+                size="lg"
+                variant="outline-primary"
+                @click="checkAnswer(selectedOptions[0])"
+                >{{ selectedOptions[0] }}
               </b-button>
-              <br>
-              <b-button pill size="lg" variant="outline-primary" @click="checkAnswer(opciones.opc2)">{{opciones.opc2}}</b-button>
-              <br>
-              <b-button pill size="lg" variant="outline-primary" @click="checkAnswer(opciones.opc3)">{{opciones.opc3}}</b-button>
-              <br>
-              <b-button pill size="lg" variant="outline-primary" @click="checkAnswer(opciones.opc4)">{{opciones.opc4}}</b-button>
-              <br>
+              <br />
+              <b-button
+                pill
+                size="lg"
+                variant="outline-primary"
+                @click="checkAnswer(selectedOptions[1])"
+                >{{ selectedOptions[1] }}</b-button
+              >
+              <br />
+              <b-button
+                pill
+                size="lg"
+                variant="outline-primary"
+                @click="checkAnswer(selectedOptions[2])"
+                >{{ selectedOptions[2] }}</b-button
+              >
+              <br />
+              <b-button
+                pill
+                size="lg"
+                variant="outline-primary"
+                @click="checkAnswer(selectedOptions[3])"
+                >{{ selectedOptions[3] }}</b-button
+              >
+              <br />
             </b-button-group>
           </b-card-text>
-              <b-button pill size="lg" variant="outline-danger" @click="selectWord()">Otra palabra</b-button>
-            
+          <b-button
+            pill
+            size="lg"
+            variant="outline-danger"
+            @click="selectWord()"
+            >Otra palabra</b-button
+          >
+          <br />
+          <br />
+          <h3>Palabras Restantes {{ this.palabras.length }}</h3>
         </b-card>
       </b-card-group>
     </div>
@@ -37,77 +67,114 @@
 export default {
   data() {
     return {
-      palabra: "JUAN",
-      
-      opciones:{
-        opc1:'Opcion 1 kas',
-        opc2:'tu hermana',
-        opc3:'Tu vieja',
-        opc4:'Tu prima no esta diponible santiago del estero'
-      },
-      palabras:[
-        {
-          palabra:'pal1',
-          traduccion:'Opcion 1 kas',
-        },
-        {
-          palabra:'pal2',
-          traduccion:'tu hermana',
-        },
-        {
-          palabra:'pal3',
-          traduccion:'Tu vieja',
-        },
-        {
-          palabra:'pal4',
-          traduccion:'Tu prima no esta diponible santiago del estero',
-        },
-        ],
-      selectedword:'',
-     
+      options: [
+        "Jerga",
+        "Sentido, de que algo es sentido",
+        "Ojala",
+        "Incomodo",
+        "vinculación",
+        "desesperado",
+        "levemente ,ligeramente",
+        "locura",
+        "Mientras, mientras que",
+        "pestañas",
+      ],
+      selectedOptions: [],
 
-
+      palabras: [
+        {
+          palabra: "Slang",
+          traduccion: "Jerga",
+        },
+        {
+          palabra: "Heartfelt",
+          traduccion: "Sentido, de que algo es sentido",
+        },
+        {
+          palabra: "Hopefully",
+          traduccion: "Ojala",
+        },
+        {
+          palabra: "Awkward",
+          traduccion: "Incomodo",
+        },
+        {
+          palabra: "Eyelashes",
+          traduccion: "pestañas",
+        },
+        {
+          palabra: "Lacking",
+          traduccion: "carente",
+        },
+        
+      ],
+      selectedword: "",
     };
-
-
   },
   methods: {
-    checkAnswer(rta){
-      if (rta==this.selectedword.traduccion) {
-        alert('Correcto Rey');
+    checkAnswer(rta) {
+      if (rta == this.selectedword.traduccion) {
+        alert("Correcto Rey");
       } else {
-        alert('Novato')
+        alert("Novato");
       }
-      },
-      selectIndex(){
-        const lenght= this.palabras.length
-        var random;
-        random=Math.floor(Math.random() * lenght) 
-        //console.log(random);
-        return random
-      },
-      async selectWord(){
-      var index = this.selectIndex();
-      if(index){
-      this.selectedword=this.palabras[index];
-      }
-      else {
-        alert('no hay mas palabras, recarga')
-      }
-      
-      console.log('selected Word', this.selectedword);
-      //console.log(this.palabras[index])
-      
-      this.palabras.splice(index,1)
-      console.log(this.palabras)
-      
-      
+    },
+    async selectOptions(qty) {
+      this.selectedOptions = [];
+      this.selectedOptions.push(this.selectedword.traduccion);
 
-      },
+      let optionsaux =  [...this.options]    ;
+
+      //saco la correcta de las opciones pq ya la agregue en las opciones seleccionadas
+      for (var i = 0; i < optionsaux.length -1 ; i++) {
+        if (optionsaux[i] === this.selectedword.traduccion) {
+          optionsaux.splice(i, 1);
+        }
+      }
+
+      //console.log(optionsaux, 'no tiene que estar la correcta');
+      //
+      let index;
+
+      for (let i = 0; i < qty - 1; i++) {
+        let lengthOptions = optionsaux.length;
+        index = await this.selectIndex(lengthOptions);
+        this.selectedOptions.push(optionsaux[index]);
+        optionsaux.splice(index, 1);
+        this.selectedOptions = this.selectedOptions.sort(() => Math.random() - 0.5)
+
+}
+
+
+
+
+      //console.log(lengthOptions);
+      //console.log(this.selectedOptions, "qty", qty);
+    },
+    async selectIndex(lenghtArray) {
+
+      var random = 0;
+      //console.log('multi',lenghtArray)
+      random = await Math.floor(Math.random() * lenghtArray);
+      return random;
+    },
+    async selectWord() {
+      this.selectedword = "";
+      if (this.palabras.length > 0) {
+        let index = await this.selectIndex(this.palabras.length);
+        this.selectedword = this.palabras[index];
+        this.selectOptions(4);
+        //console.log('selected Word', this.selectedword.palabra);
+        this.palabras.splice(index, 1);
+        //console.log(this.palabras)
+      } else {
+        console.log("No hay mas palabras");
+      }
+      //console.log(this.palabras[index])
+    },
   },
   mounted() {
     this.selectWord();
   },
-  
 };
 </script>
