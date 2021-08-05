@@ -79,6 +79,11 @@
           <br />
           <br />
           <h3>Palabras Restantes {{ this.palabras.length }}</h3>
+          <h4>Correctas:{{this.corrects}}</h4>
+          <h4>Incorrectas:{{this.incorrects}}</h4>
+
+
+          
         </b-card>
       </b-card-group>
     </div>
@@ -91,6 +96,8 @@
 export default {
   data() {
     return {
+      corrects:0,
+      incorrects:0,
       options: [
         "Jerga",
         "Sentido, de que algo es sentido",
@@ -137,9 +144,17 @@ export default {
   methods: {
     checkAnswer(rta) {
       if (rta == this.selectedword.traduccion) {
-        alert("Correcto Rey");
+        //alert("Correcto Rey");
+        this.corrects++;
+        setTimeout(() => {
+                  this.selectWord();
+        }, 400);
       } else {
-        alert("Novato");
+         this.incorrects++;
+        setTimeout(() => {
+          this.selectWord();
+        }, 250);
+        
       }
     },
     async selectOptions(qty) {
