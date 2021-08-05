@@ -9,7 +9,7 @@
           header-text-variant="white"
           align="center"
         >
-          <b-card-text>
+          <!--  <b-card-text>
             <b-button-group vertical>
               <b-button
                 pill
@@ -45,6 +45,30 @@
               <br />
             </b-button-group>
           </b-card-text>
+           VIEJOOOOOOO viejo card text -->
+
+          <!-- Nuevo b card text -->
+
+          <b-card-text>
+            <b-button-group vertical>
+              
+              
+              <b-button
+                style="border-top-width: 4px"
+                v-for="(option, index) in selectedOptions"
+                :key="index"
+                pill
+                size="lg"
+                variant="outline-primary"
+                @click="checkAnswer(option)"
+              >
+                {{ option }}
+              </b-button>
+
+
+            </b-button-group>
+          </b-card-text>
+
           <b-button
             pill
             size="lg"
@@ -106,7 +130,6 @@ export default {
           palabra: "Lacking",
           traduccion: "carente",
         },
-        
       ],
       selectedword: "",
     };
@@ -123,10 +146,10 @@ export default {
       this.selectedOptions = [];
       this.selectedOptions.push(this.selectedword.traduccion);
 
-      let optionsaux =  [...this.options]    ;
+      let optionsaux = [...this.options];
 
       //saco la correcta de las opciones pq ya la agregue en las opciones seleccionadas
-      for (var i = 0; i < optionsaux.length -1 ; i++) {
+      for (var i = 0; i < optionsaux.length - 1; i++) {
         if (optionsaux[i] === this.selectedword.traduccion) {
           optionsaux.splice(i, 1);
         }
@@ -141,18 +164,15 @@ export default {
         index = await this.selectIndex(lengthOptions);
         this.selectedOptions.push(optionsaux[index]);
         optionsaux.splice(index, 1);
-        this.selectedOptions = this.selectedOptions.sort(() => Math.random() - 0.5)
-
-}
-
-
-
+        this.selectedOptions = this.selectedOptions.sort(
+          () => Math.random() - 0.5
+        );
+      }
 
       //console.log(lengthOptions);
       //console.log(this.selectedOptions, "qty", qty);
     },
     async selectIndex(lenghtArray) {
-
       var random = 0;
       //console.log('multi',lenghtArray)
       random = await Math.floor(Math.random() * lenghtArray);
@@ -163,7 +183,7 @@ export default {
       if (this.palabras.length > 0) {
         let index = await this.selectIndex(this.palabras.length);
         this.selectedword = this.palabras[index];
-        this.selectOptions(4);
+        this.selectOptions(6);
         //console.log('selected Word', this.selectedword.palabra);
         this.palabras.splice(index, 1);
         //console.log(this.palabras)
