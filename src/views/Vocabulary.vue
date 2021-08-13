@@ -3,6 +3,7 @@
     <div class="container">
       <b-card-group deck>
         <b-card
+          v-if="selectedword.palabra"
           border-variant="primary"
           :header="selectedword.palabra"
           header-bg-variant="primary"
@@ -51,8 +52,6 @@
 
           <b-card-text>
             <b-button-group vertical>
-              
-              
               <b-button
                 style="border-top-width: 4px"
                 v-for="(option, index) in selectedOptions"
@@ -64,8 +63,6 @@
               >
                 {{ option }}
               </b-button>
-
-
             </b-button-group>
           </b-card-text>
 
@@ -79,12 +76,34 @@
           <br />
           <br />
           <h3>Palabras Restantes {{ this.palabras.length }}</h3>
-          <h4>Correctas:{{this.corrects}}</h4>
-          <h4>Incorrectas:{{this.incorrects}}</h4>
+          <h4>Correctas:{{ this.corrects }}</h4>
+          <h4>Incorrectas:{{ this.incorrects }}</h4>
 
-
-          
+          <div class="container">
+            <div class="row">
+              <div class="col-sm"></div>
+              <div class="col-sm"></div>
+              <div class="col-sm">
+                <div class="mt-2">Cantidad de opcines:</div>
+                <b-form-input
+                  class="mt-2"
+                  style="text-align: center"
+                  v-model="qtyOptions"
+                  type="number"
+                  placeholder="Quantity options"
+                ></b-form-input>
+                <br />
+                <b-button class="primary" @click="selectOptions">OK</b-button>
+              </div >
+              <div class="col-sm"></div>
+              <div class="col-sm"></div>
+            </div>
+          </div>
         </b-card>
+        <div v-else>
+        <h1 >No Hay mas palabras :(</h1>
+        <b-button block variant="success" to="/Form">Cargar mas palabras</b-button>
+        </div>
       </b-card-group>
     </div>
   </div>
@@ -96,8 +115,9 @@
 export default {
   data() {
     return {
-      corrects:0,
-      incorrects:0,
+      qtyOptions: 4,
+      corrects: 0,
+      incorrects: 0,
       options: [
         "Jerga",
         "Sentido, de que algo es sentido",
@@ -147,17 +167,16 @@ export default {
         //alert("Correcto Rey");
         this.corrects++;
         setTimeout(() => {
-                  this.selectWord();
+          this.selectWord();
         }, 400);
       } else {
-         this.incorrects++;
+        this.incorrects++;
         setTimeout(() => {
           this.selectWord();
         }, 250);
-        
       }
     },
-    async selectOptions(qty) {
+    async selectOptions() {
       this.selectedOptions = [];
       this.selectedOptions.push(this.selectedword.traduccion);
 
@@ -174,7 +193,7 @@ export default {
       //
       let index;
 
-      for (let i = 0; i < qty - 1; i++) {
+      for (let i = 0; i < this.qtyOptions - 1; i++) {
         let lengthOptions = optionsaux.length;
         index = await this.selectIndex(lengthOptions);
         this.selectedOptions.push(optionsaux[index]);
@@ -198,7 +217,7 @@ export default {
       if (this.palabras.length > 0) {
         let index = await this.selectIndex(this.palabras.length);
         this.selectedword = this.palabras[index];
-        this.selectOptions(6);
+        this.selectOptions();
         //console.log('selected Word', this.selectedword.palabra);
         this.palabras.splice(index, 1);
         //console.log(this.palabras)

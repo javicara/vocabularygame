@@ -1,15 +1,15 @@
 <template>
   <div id="app">
     <div id="nav">
+      <router-link to="/Form">Form</router-link> |
       <router-link to="/">Vocabulary</router-link> |
       <router-link to="/Verbs">Verbs</router-link>
     </div>
-    <router-view/>
+    <router-view />
   </div>
 </template>
 
 <style>
-
 #app {
   font-family: Avenir, Helvetica, Arial, sans-serif;
   -webkit-font-smoothing: antialiased;

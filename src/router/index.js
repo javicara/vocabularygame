@@ -6,6 +6,12 @@ Vue.use(VueRouter)
 
 const routes = [
   {
+    path: '/Form',
+    name: 'Create',
+    component: () => import(/* webpackChunkName: "about" */ '../views/FormNew.vue')
+
+  },
+  {
     path: '/',
     name: 'Vocabulary',
     component: Vocabulary
